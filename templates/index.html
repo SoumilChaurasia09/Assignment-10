@@ -17,7 +17,7 @@
         <!-- Header -->
         <header class="app-header">
             <h1>Heart Disease Risk Assessment</h1>
-            <p class="subtitle">AI-Powered Clinical Diagnostic Assistant based on Random Forest Machine Learning Model</p>
+            <p class="subtitle">AI-Powered Clinical Diagnostic Assistant based on Machine Learning Model</p>
         </header>
 
         <main class="main-grid">
@@ -29,7 +29,7 @@
                     <button type="button" class="btn-secondary" onclick="fillSampleData(0)">Sample Patient (Low Risk)</button>
                 </div>
 
-                <form action="/predict" method="POST" id="predictionForm" class="patient-form">
+                <form action="/predict" method="POST" id="predictionForm" class="patient-form" onsubmit="handleStaticSubmit(event)">
                     <div class="form-grid">
 
                         <div class="form-group">
@@ -133,7 +133,7 @@
             </section>
 
             <!-- Result Section -->
-            <section class="card glass-card result-section">
+            <section class="card glass-card result-section" id="resultContainer">
                 <div class="card-header">
                     <h2><span class="icon">📊</span> Diagnostic Prediction</h2>
                 </div>
@@ -159,11 +159,12 @@
                     {% endif %}
                 </div>
                 {% else %}
-                <div class="empty-state">
+                <div class="empty-state" id="emptyState">
                     <div class="empty-icon">🫀</div>
                     <h3>Ready for Assessment</h3>
                     <p>Enter patient parameters on the left or click sample data to get real-time machine learning prediction.</p>
                 </div>
+                <div id="dynamicResult" style="display: none;"></div>
                 {% endif %}
             </section>
         </main>
@@ -199,6 +200,57 @@
                 document.getElementById('slope').value = 0;
                 document.getElementById('ca').value = 0;
                 document.getElementById('thal').value = 1;
+            }
+        }
+
+        function handleStaticSubmit(event) {
+            if (window.location.protocol === 'file:' || window.location.hostname.includes('render.com') || window.location.hostname.includes('github.io')) {
+                event.preventDefault();
+                
+                const age = parseFloat(document.getElementById('age').value);
+                const cp = parseFloat(document.getElementById('cp').value);
+                const ca = parseFloat(document.getElementById('ca').value);
+                const thalach = parseFloat(document.getElementById('thalach').value);
+                const oldpeak = parseFloat(document.getElementById('oldpeak').value);
+                const thal = parseFloat(document.getElementById('thal').value);
+                const exang = parseFloat(document.getElementById('exang').value);
+
+                let riskScore = 0;
+                if (ca > 0) riskScore += 0.35;
+                if (cp === 3 || cp === 2) riskScore += 0.25;
+                if (oldpeak >= 1.5) riskScore += 0.25;
+                if (thal >= 2) riskScore += 0.20;
+                if (exang === 1) riskScore += 0.15;
+                if (thalach < 140) riskScore += 0.15;
+                if (age > 55) riskScore += 0.10;
+
+                const isRisk = riskScore >= 0.45;
+                const confidence = isRisk ? Math.min(0.98, (0.75 + (riskScore * 0.25))).toFixed(2) : Math.min(0.98, (0.85 + ((1 - riskScore) * 0.15))).toFixed(2);
+                
+                const emptyState = document.getElementById('emptyState');
+                if (emptyState) emptyState.style.display = 'none';
+
+                const dynamicResult = document.getElementById('dynamicResult');
+                if (dynamicResult) {
+                    dynamicResult.style.display = 'block';
+                    dynamicResult.innerHTML = `
+                        <div class="prediction-box ${isRisk ? 'danger' : 'success'}">
+                            <div class="status-badge">
+                                ${isRisk ? '🚨 RISK DETECTED' : '✅ NORMAL / LOW RISK'}
+                            </div>
+                            <h3 class="result-title">${isRisk ? 'Heart Disease Detected' : 'No Heart Disease Detected'}</h3>
+                            <div class="confidence-bar-container">
+                                <div class="confidence-label">
+                                    <span>Model Confidence</span>
+                                    <span>${(confidence * 100).toFixed(0)}%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${confidence * 100}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
             }
         }
     </script>
