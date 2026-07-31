@@ -160,13 +160,6 @@
                             <div class="progress-fill" style="width: {{ result.confidence * 100 }}%;"></div>
                         </div>
                     </div>
-                    {% endif %}
-
-                    <div class="response-json-box">
-                        <div class="json-header">Task 3 REST API JSON Output</div>
-                        <pre><code>{{ result | tojson(indent=2) }}</code></pre>
-                    </div>
-                </div>
                 {% else %}
                 <div class="empty-state">
                     <div class="empty-icon">🫀</div>
@@ -174,15 +167,6 @@
                     <p>Enter patient parameters on the left or click sample data to get real-time machine learning prediction.</p>
                 </div>
                 {% endif %}
-
-                <!-- API Guidance -->
-                <div class="api-info-box">
-                    <h4>🚀 REST API Endpoint</h4>
-                    <p>Send a <code>POST</code> request with <code>Content-Type: application/json</code> to <code>/predict</code>:</p>
-                    <pre class="code-snippet"><code>curl -X POST https://your-render-app.onrender.com/predict \
-  -H "Content-Type: application/json" \
-  -d '{"age":63,"sex":1,"cp":0,"trestbps":145,"chol":233,"fbs":1,"restecg":0,"thalach":150,"exang":0,"oldpeak":2.3,"slope":0,"ca":0,"thal":1}'</code></pre>
-                </div>
             </section>
         </main>
     </div>
