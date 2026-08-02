@@ -12,9 +12,9 @@ This repository contains an end-to-end Machine Learning deployment solution for 
 ## 🌐 Live Render Deployment URL
 
 - **GitHub Repository:** [https://github.com/SoumilChaurasia09/Assignment-10](https://github.com/SoumilChaurasia09/Assignment-10)
-- **Render Live Service URL:** [https://heart-disease-prediction-g0ln.onrender.com/](https://heart-disease-prediction-g0ln.onrender.com/)
-- **API Health Endpoint:** `GET https://heart-disease-prediction-g0ln.onrender.com/health`
-- **API Prediction Endpoint:** `POST https://heart-disease-prediction-g0ln.onrender.com/predict`
+- **Render Live Service URL:** [https://heart-disease-prediction-4z7m.onrender.com](https://heart-disease-prediction-4z7m.onrender.com)
+- **API Health Endpoint:** `GET https://heart-disease-prediction-4z7m.onrender.com/health`
+- **API Prediction Endpoint:** `POST https://heart-disease-prediction-4z7m.onrender.com/predict`
 
 ---
 
@@ -64,7 +64,7 @@ Developed a Flask REST API with `/predict` endpoint:
 
 #### Example Request:
 ```bash
-curl -X POST https://heart-disease-prediction-g0ln.onrender.com/predict \
+curl -X POST https://heart-disease-prediction-4z7m.onrender.com/predict \
   -H "Content-Type: application/json" \
   -d '{
     "age": 67,
